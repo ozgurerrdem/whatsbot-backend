@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:16
+    container_name: wb-postgres
+    environment:
+      POSTGRES_DB: whatsbot
+      POSTGRES_USER: wbuser
+      POSTGRES_PASSWORD: wbpass
+    ports:
+      - "5432:5432"
+    volumes:
+      - wb_pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    container_name: wb-redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  wb_pgdata:
