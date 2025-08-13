@@ -1,11 +1,8 @@
 server:
   port: 8080
 
+# Ortak varsayılanlar
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/whatsbot
-    username: wbuser
-    password: wbpass
   jpa:
     hibernate:
       ddl-auto: update
@@ -15,9 +12,43 @@ spring:
         jdbc.time_zone: UTC
     open-in-view: false
   flyway:
-    enabled: true
-    locations: classpath:db/migration
+    enabled: false
 
-logging:
-  level:
-    org.hibernate.SQL: debug
+app:
+  security:
+    enabled: false
+  jwt:
+    expiresInSeconds: 36000
+    secret: ${APP_JWT_SECRET_DEV:Z0Y2Qm5vU0Zsd05VQWUyQkZZdW5ac3l6eGxscXcyc0E=}
+  cors:
+    webui-server: http://localhost:5173
+
+# DEV
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:postgresql://localhost:5432/whatsbot
+    username: wbuser
+    password: wbpass
+
+# PROD
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: jdbc:postgresql://db:5432/whatsbot
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+
+app:
+  security:
+    enabled: true
+  jwt:
+    secret: ${APP_JWT_SECRET}
+  cors:
+    webui-server: ${APP_CORS_WEBUI_SERVER:https://senin-domainin.com}
