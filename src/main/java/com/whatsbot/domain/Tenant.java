@@ -1,22 +1,30 @@
 package com.whatsbot.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.UUID;
 
 @Entity
-@Table(name = "tenants")
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+@Table(
+        name = "tenants",
+        uniqueConstraints = @UniqueConstraint(name = "ux_tenants_tenant_code", columnNames = "tenant_code")
+)
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Tenant extends BaseEntity {
 
     @Id
     private UUID id;
 
-    private String name;         // kurum adı
-    private String whatsappBusinessApiPhoneId;  // WhatsApp Business API phone id
-    private String metaAppId;    // Meta App id
-    private String metaToken;    // API erişim token
+    @Column(name = "tenant_code", nullable = false, length = 64)
+    private String tenantCode;
+
+    private String name;
+    private String whatsappBusinessApiPhoneId;
+    private String metaAppId;
+    private String metaToken;
 }
